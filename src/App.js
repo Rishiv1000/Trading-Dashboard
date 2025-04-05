@@ -16,9 +16,17 @@ const fetchPriceData = async () => {
 
 const calculateMovingAverage = (data, period) => {
   if (data.length < period) return null;
-  const sum = data.slice(-period).reduce((acc, val) => acc + val, 0);
-  return sum / period;
+
+  const recentPrices = data.slice(-period);
+  let total = 0;
+  for (let price of recentPrices) {
+    total += price;
+  }
+
+  return total / period;
 };
+
+
 
 export default function App() {
   const [price, setPrice] = useState(null);
@@ -79,7 +87,7 @@ export default function App() {
       <h1>📈 BTC/USDT Trading Dashboard</h1>
 
       <div className="info">
-        <p>Current Price: <strong>${price ? price.toFixed(2) : "Calculating..."}</strong></p>
+        <p>Current Price: <strong>{price ? price.toFixed(2) : "Calculating..."}</strong></p>
         <p>Short MA (5): <strong>{shortMA !== null ? shortMA.toFixed(2) : "Calculating..."}</strong></p>
         <p>Long MA (20): <strong>{longMA !== null ? longMA.toFixed(2) : "Calculating..."}</strong></p>
 
