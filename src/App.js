@@ -34,7 +34,6 @@ export default function App() {
   const [shortMA, setShortMA] = useState(null);
   const [longMA, setLongMA] = useState(null);
   const [signal, setSignal] = useState("Calculating...");
-  const [previousSignal, setPreviousSignal] = useState(null);
   const [tradeHistory, setTradeHistory] = useState([]);
 
   const processPriceData = (newPrice) => {
@@ -48,13 +47,11 @@ export default function App() {
     setLongMA(longMA);
 
     if (shortMA && longMA) {
-      if (shortMA > longMA && previousSignal !== "Buy 🚀") {
+      if (shortMA > longMA) {
         setSignal("Buy 🚀");
-        setPreviousSignal("Buy 🚀");
         addTrade("Buy", newPrice);
-      } else if (shortMA < longMA && previousSignal !== "Sell 🔻") {
+      } else if (shortMA < longMA ) {
         setSignal("Sell 🔻");
-        setPreviousSignal("Sell 🔻");
         addTrade("Sell", newPrice);
       }
     } else {
@@ -71,7 +68,7 @@ export default function App() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [priceHistory, previousSignal]);
+  }, [priceHistory]);
 
   const addTrade = (type, price) => {
     const newTrade = {
